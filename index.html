@@ -42,7 +42,135 @@
             <input type="reset" value="Reset Form">
         </div>
 
-        </fieldset>
+		</fieldset>
+		<!-- CAPTCHA Container Component -->
+<div class="captcha-box-component">
+    <style>
+        .captcha-box-component {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            max-width: 320px;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .captcha-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 8px;
+        }
+        #captchaDisplay {
+            background: #f1f5f9;
+            color: #1e293b;
+            font-size: 24px;
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: 5px;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            flex-grow: 1;
+            user-select: none;
+            text-decoration: line-through;
+            border: 2px dashed #cbd5e1;
+            text-shadow: 1px 1px #cbd5e1;
+        }
+        #captchaReload {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #captchaReload:hover { background: #334155; }
+        .captcha-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+        .captcha-input:focus { border-color: #3b82f6; }
+        #captchaVerify {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #captchaVerify:hover { background: #2563eb; }
+        #captchaStatus {
+            margin-top: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+    </style>
+
+    <div class="captcha-row">
+        <div id="captchaDisplay"></div>
+        <button type="button" id="captchaReload" title="Change code">↻</button>
+    </div>
+
+    <input 
+        type="text" 
+        id="captchaValueInput" 
+        class="captcha-input" 
+        placeholder="Enter verification text" 
+        autocomplete="off" 
+        required
+    >
+    <button type="button" id="captchaVerify">Verify Code</button>
+    <div id="captchaStatus"></div>
+
+    <script>
+        (function() {
+            let activeCode = "";
+            const charPool = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz023456789";
+
+            function makeNewCode() {
+                let text = "";
+                for (let i = 0; i < 6; i++) {
+                    text += charPool.charAt(Math.floor(Math.random() * charPool.length));
+                }
+                activeCode = text;
+                document.getElementById("captchaDisplay").innerText = text;
+                document.getElementById("captchaValueInput").value = "";
+                document.getElementById("captchaStatus").innerText = "";
+            }
+
+            document.getElementById("captchaVerify").addEventListener("click", function() {
+                const userEntered = document.getElementById("captchaValueInput").value.trim();
+                const status = document.getElementById("captchaStatus");
+
+                if (userEntered === activeCode) {
+                    status.innerText = "✓ Valid Code";
+                    status.style.color = "#16a34a";
+                } else {
+                    status.innerText = "✗ Invalid Code. Resetting...";
+                    status.style.color = "#dc2626";
+                    makeNewCode();
+                }
+            });
+
+            document.getElementById("captchaReload").addEventListener("click", makeNewCode);
+            window.addEventListener("DOMContentLoaded", makeNewCode);
+        })();
+    </script>
+</div>
+		
 
         <br>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
